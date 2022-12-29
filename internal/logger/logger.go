@@ -10,8 +10,8 @@ import (
 )
 
 type Config struct {
-	HumanLogs bool   `env:"HUMAN_LOGS,default=false"`
-	LogLevel  string `env:"LOG_LEVEL,default=info"`
+	HumanLogs bool   `env:"HUMAN_LOGS,default=true"`
+	LogLevel  string `env:"LOG_LEVEL,default=debug"`
 }
 
 // Configure setups Zerolog to print pretty logs if HUMAN_LOGS is set to 1/T/true (default is false).

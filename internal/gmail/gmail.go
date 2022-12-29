@@ -3,16 +3,23 @@ package gmail
 import (
 	"context"
 
+	"github.com/robsztal/FanMyMail/cmd/config"
 	"github.com/rs/zerolog/log"
+	"golang.org/x/oauth2"
 	v1 "google.golang.org/api/gmail/v1"
+	"google.golang.org/api/option"
 )
 
 type Client struct {
 	svc *v1.Service
 }
 
-func NewClient(ctx context.Context) (Client, error) {
-	svc, err := v1.NewService(ctx)
+var tokenCh = make(chan *oauth2.Token, 1)
+
+func NewClient(ctx context.Context, cfg config.Config) (Client, error) {
+	token := getToken(ctx, cfg.OAuthCfg)
+	client := cfg.OAuthCfg.Client(ctx, token)
+	svc, err := v1.NewService(ctx, option.WithHTTPClient(client))
 	if err != nil {
 		return Client{}, err
 	}
